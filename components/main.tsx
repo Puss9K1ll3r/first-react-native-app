@@ -1,21 +1,56 @@
 import { useState } from 'react';
-import { StyleSheet, Image, Text, View, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Image, Text, View, TouchableOpacity, FlatList, Modal } from 'react-native';
 import { gStyle } from '../styles/style';
-
+import Ionicons from '@expo/vector-icons/Ionicons';
+import Form from './form';
 
 export default function Main({ navigation }) {
-    const loadScene = () => {
-        navigation.navigate('Contacts');
-    }
-
     const [news, setNews] = useState([
-        { name: 'Google', anons: 'Google!!', full: 'Google is cool', key: '1', img: require('../assets/img/idea.png') },
-        { name: 'Apple', anons: 'Apple!!', full: 'Apple is cool', key: '2', img: require('../assets/img/imagine.png') },
-        { name: 'VK', anons: 'VK!!', full: 'VK is cool', key: '3', img: require('../assets/img/cat.png') }
+        { name: 'Теория струн', anons: 'Почему вселенная не так проста, какой кажется', full: 'Представим, что здесь очень длинный и скучный текст', key: '1', img: require('../assets/img/idea.png') },
+        { name: 'Mail.ru', anons: 'Откуда ответы на все вопросы', full: 'Иллюминаты уже давно завладели всем интернетом и мы оказались в цифровой ловушке...', key: '2', img: require('../assets/img/imagine.png') },
+        { name: 'Павел Дуров', anons: 'Миллиардер, плейбой, филантроп', full: 'Действительно удивительный человек', key: '3', img: require('../assets/img/cat.png') }
     ]);
+
+    const [modalWindow, setModalWindow] = useState(false)
+
+    const addArticle = (article) => {
+        setNews((list) => {
+            article.key = Math.random().toString();
+            return [
+                article,
+                ...list
+            ]
+        });
+        setModalWindow(false);
+    }
 
     return (
         <View style={gStyle.main}>
+            <Modal 
+                visible={modalWindow}
+                transparent={true}
+            >
+                <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
+                        <Ionicons 
+                            name="close-circle" 
+                            size={34} 
+                            color="red" 
+                            style={styles.iconClose}
+                            onPress={() => setModalWindow(false)}    
+                        />
+                        <Text style={styles.title}>Создать статью</Text>
+                        <Form addArticle={addArticle}/>
+                    </View>
+                </View>
+            </Modal>
+            <Ionicons 
+                name="add-circle" 
+                size={34} 
+                color="black" 
+                style={styles.iconAdd}
+                onPress={() => setModalWindow(true)}
+            />
             <Text style={gStyle.title}>Добро пожаловать</Text>
             <FlatList 
                 data={news} 
@@ -35,6 +70,13 @@ export default function Main({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    iconAdd: {
+        textAlign: 'right',
+        marginBottom: 15
+    },
+    iconClose: {
+        textAlign: 'right'
+    },
     header: {
         marginBottom: 30
     },

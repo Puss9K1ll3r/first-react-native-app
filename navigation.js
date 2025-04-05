@@ -17,14 +17,14 @@ export default function Navigate() {
                     {
                         title: 'Главная',
                         headerStyle: { backgroundColor: '#eb5d3d', height: 100 },
-                        headerTitleStyle: { fontWeight: 'light' }
+                        headerTitleStyle: { fontWeight: '400' }
                     }
                 }
             />
             <Stack.Screen
                 name="FullInfo"
                 component={FullInfo}
-                options={{title: 'Статья'}}
+                options={{title: 'Статья', headerStyle: { backgroundColor: '#eb5d3d', height: 100 }}}
             />
         </Stack.Navigator>
     </NavigationContainer>;
