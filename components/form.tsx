@@ -1,8 +1,7 @@
 import { StyleSheet, TextInput, View, Button } from 'react-native';
-import { gStyle } from '../styles/style';
 import { Formik } from 'formik';
 
-export default function Form({addArticle}) {
+export default function Form({ addArticle }) {
     return (
         <View>
             <Formik
@@ -10,7 +9,7 @@ export default function Form({addArticle}) {
                     name: '',
                     anons: '',
                     full: '',
-                    img: ''
+                    img: '' // Здесь будет URL изображения
                 }}
                 onSubmit={(values, action) => {
                     addArticle(values);
@@ -42,7 +41,7 @@ export default function Form({addArticle}) {
                         <TextInput 
                             style={styles.input}
                             value={props.values.img} 
-                            placeholder='Прикрепите фото' 
+                            placeholder='Введите URL изображения' 
                             onChangeText={props.handleChange('img')}
                         />
                         <Button title='Создать' onPress={props.handleSubmit}/>
@@ -61,4 +60,4 @@ const styles = StyleSheet.create({
         borderColor: 'silver',
         borderRadius: 5
     }
-})
+});

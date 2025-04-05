@@ -11,27 +11,30 @@ export default function Main({ navigation }) {
         { name: 'Павел Дуров', anons: 'Миллиардер, плейбой, филантроп', full: 'Действительно удивительный человек', key: '3', img: require('../assets/img/cat.png') }
     ]);
 
-    const [modalWindow, setModalWindow] = useState(false)
+    const [modalWindow, setModalWindow] = useState(false);
 
     const addArticle = (article) => {
         setNews((list) => {
             article.key = Math.random().toString();
+            // Для сетевых изображений используем { uri: article.img }
+            // Для локальных оставляем как есть (require)
+            const imgSource = article.img.startsWith('http') 
+                ? { uri: article.img } 
+                : article.img;
+                
             return [
-                article,
+                { ...article, img: imgSource },
                 ...list
-            ]
+            ];
         });
         setModalWindow(false);
-    }
+    };
 
     return (
         <View style={gStyle.main}>
-            <Modal 
-                visible={modalWindow}
-                transparent={true}
-            >
+            <Modal visible={modalWindow} transparent={true}>
                 <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
+                    <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '80%' }}>
                         <Ionicons 
                             name="close-circle" 
                             size={34} 
@@ -44,6 +47,7 @@ export default function Main({ navigation }) {
                     </View>
                 </View>
             </Modal>
+            
             <Ionicons 
                 name="add-circle" 
                 size={34} 
@@ -51,7 +55,9 @@ export default function Main({ navigation }) {
                 style={styles.iconAdd}
                 onPress={() => setModalWindow(true)}
             />
+            
             <Text style={gStyle.title}>Добро пожаловать</Text>
+            
             <FlatList 
                 data={news} 
                 renderItem={({ item }) => (
@@ -59,11 +65,13 @@ export default function Main({ navigation }) {
                         <Image 
                             source={item.img}
                             style={{ width: '100%', height: 300 }}
+                            resizeMode="cover"
                         />
                         <Text style={styles.title}>{item.name}</Text>
                         <Text style={styles.anons}>{item.anons}</Text>
                     </TouchableOpacity>
                 )} 
+                keyExtractor={item => item.key}
             />
         </View>
     );
@@ -76,9 +84,6 @@ const styles = StyleSheet.create({
     },
     iconClose: {
         textAlign: 'right'
-    },
-    header: {
-        marginBottom: 30
     },
     item: {
         width: '100%',
@@ -98,4 +103,4 @@ const styles = StyleSheet.create({
         marginTop: 5,
         color: '#474747'
     }
-})
+});
